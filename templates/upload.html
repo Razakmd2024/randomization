@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Randomization</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px gray; }
+        .alert { color: red; font-weight: bold; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        button { background-color: #28a745; color: white; padding: 10px 15px; border: none; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #218838; }
+        input[type="file"] { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Team Formation Randomization</h2>
+
+        <!-- Required Columns Table -->
+        <h3>Required Columns for Excel File</h3>
+        <table>
+            <tr><th>Column Name</th></tr>
+            {% for col in required_columns %}
+                <tr><td>{{ col }}</td></tr>
+            {% endfor %}
+        </table>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="alert">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if missing_columns %}
+            <h3 class="alert">Missing Required Columns</h3>
+            <table>
+                <tr><th>Missing Column Name</th></tr>
+                {% for col in missing_columns %}
+                    <tr><td>{{ col }}</td></tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Upload & Randomize</button>
+        </form>
+
+        {% if teams %}
+            <h2>Randomized Teams</h2>
+            <table>
+                <tr>
+                    <th>Team Code</th>
+                    <th>Employee Code</th>
+                    <th>Employee Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Office Address</th>
+                    <th>Mobile</th>
+                    <th>Polling Station Role</th>
+                </tr>
+                {% for row in teams %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <br>
+            <a href="{{ url_for('download_file') }}">
+                <button>Download Excel File</button>
+            </a>
+        {% endif %}
+    </div>
+</body>
+</html>
