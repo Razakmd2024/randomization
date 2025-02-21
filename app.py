@@ -4,7 +4,7 @@ import os
 from flask import Flask, render_template, request, send_file, flash, redirect, url_for, session
 
 app = Flask(__name__, static_folder="static")
-app.secret_key = "your_secret_key"
+app.secret_key = "Election@2025"
 
 UPLOAD_FOLDER = "uploads"
 OUTPUT_FILE = "randomized_teams.xlsx"
